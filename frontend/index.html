@@ -23,7 +23,10 @@
     <!-- web3 --> <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <!-- Bootstrap --> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
-
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    
 
 
 
@@ -187,49 +190,8 @@
 
         <hr><br>
 
-        <div class="row">
-            <div class="col">
-                Select a member:
-
-                <div class="dropdown">
-                    <button class="btn btn-sm btn-secondary dropdown-toggle bg-light text-dark btn-outline-secondary" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      
-                    </button>
-                    <ul class="dropdown-menu bg-light" aria-labelledby="dropdownMenuButton1">
-                      <li><a class="dropdown-item" href="#">Chairman</a></li>
-                      <li><a class="dropdown-item" href="#">Member 1</a></li>
-                      <li><a class="dropdown-item" href="#">Member 2</a></li>
-                    </ul>
-                  </div>
-
-                  <!-- Code to change dropdown button text -->
-                  <script>
-                    var member;
-                    // Set default selected member to the first member (which should be the chairman)
-                    $(document).ready(function() {
-                      $(".dropdown .dropdown-menu li a")[0].click();
-                      
-                      console.log($('#dropdownMenuButton1').text());
-                      member = $('#dropdownMenuButton1').text();
-                    });
-
-                    // Change the button text to the selected item
-                    $(".dropdown-menu li a").click(function(){
-                      $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
-                      $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
-                      console.log($('#dropdownMenuButton1').text());
-                      member = $('#dropdownMenuButton1').text();
-                    });
-
-                    if (member == "Chairman") {
-                      console.log("Hello chairman!");
-                    }
-                    
-                  </script>
-
-            </div> <!-- End col -->
-
-            <div class="col-8">
+        <div class="row justify-content-center">
+            <div class="col-auto">
                 Poll questions: 
                 <br>
                 *Add code for getQuestion()*
@@ -245,21 +207,40 @@
             <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Poll Stats</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Manage Poll</button>
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Manage Polls</button>
           </li>
         </ul>
         <div class="tab-content" id="myTabContent">
           <!-- Poll Stats -->
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <br>
             *Call winningProposal()*
-          </div>
+          </div> <!-- End Poll Stats tab -->
+
+
           <!-- Manage Poll (only for chairman) -->
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            *Call addNewVoter()*
+            <br>
 
-          </div>
-        </div>
-        
+            <!-- Login -->
+            <form>
+
+              <b>Please enter chairman credentials:</b>
+              <br><br>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Public key (?)</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text"></div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Private key (?)</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+              </div>
+              <a type="submit" class="btn btn-sm btn-primary" href="managepoll.html">Login</a>
+            </form> <!-- End login -->
+          </div> <!-- End Manage Poll tab -->
+
+        </div> <!-- End tabs -->
         
     </div> <!-- End container -->
 
