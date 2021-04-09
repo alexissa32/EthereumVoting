@@ -1,260 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-        .container {
-            padding: 0px;
-        }
-    </style>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
-    <title>Voting App</title>
-  </head>
+  <style>
+    .container {
+      padding: 0px;
+    }
 
-  <body>
+  </style>
 
-    <!-- jQuery --> <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-    <!-- web3 --> <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <!-- Bootstrap --> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+  <title>Voting App</title>
+</head>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    
+<body>
 
 
 
-    <script>
-      
-/*
-      var contract;
 
+  <h1>TestingHAHA</h1>
 
-      if (window.ethereum){
-        var address = "0xd9145CCE52D386f254917e481eB44e9943F39138";
-        var abi = [
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "newOption",
-                "type": "string"
-              }
-            ],
-            "name": "addNewOption",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "address",
-                "name": "toAdd",
-                "type": "address"
-              }
-            ],
-            "name": "addNewVoter",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "voteChoice",
-                "type": "string"
-              }
-            ],
-            "name": "vote",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "winningProposal",
-            "outputs": [
-              {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "proposal",
-                "type": "string"
-              },
-              {
-                "internalType": "address",
-                "name": "chair",
-                "type": "address"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-          },
-          {
-            "inputs": [],
-            "name": "getOptions",
-            "outputs": [
-              {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getQuestion",
-            "outputs": [
-              {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getTotalVoted",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getTotalVoters",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          }
-        ]; // End abi
-        
-        window.web3 = new Web3(window.ethereum);
-        contract = new window.web3.eth.Contract(abi, address);
-      }
-      //web3.eth.getBlockNumber().then(() => console.log('Done!'));
-      console.log(contract.methods.getQuestion().call());
-      console.log("done!")*/
-      
-    </script>
+  <label>Contract.getQuestion</label>
+  <br />
+  <label id="myLabel"></label>
 
 
 
 
 
+  <div class="container">
 
+    <br><br><br><br> <!-- Lazy way to add a top margin -->
 
+    <div class="row justify-content-center">
 
-    <div class="container">
-
-        <br><br><br><br> <!-- Lazy way to add a top margin -->
-
-        <div class="row justify-content-center">
-
-            <div class="col-auto text-center">
-                <h1>Hello, welcome to the voting app!</h1>
-            </div>
-        </div> <!-- End row -->
-
-        <hr><br>
-
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                Poll questions: 
-                <br>
-                *Add code for getQuestion()*
-                <a class="btn btn-sm btn-light btn-outline-dark" href="vote.html">Vote!</a>
-            </div>
-            
-        </div> <!-- End row -->
-
-        <br><br>
-
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Poll Stats</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Manage Polls</button>
-          </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-          <!-- Poll Stats -->
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <br>
-            *Call winningProposal()*
-          </div> <!-- End Poll Stats tab -->
-
-
-          <!-- Manage Poll (only for chairman) -->
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <br>
-
-            <!-- Login -->
-            <form>
-
-              <b>Please enter chairman credentials:</b>
-              <br><br>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Public key (?)</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <div id="emailHelp" class="form-text"></div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Private key (?)</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-              </div>
-              <a type="submit" class="btn btn-sm btn-primary" href="managepolls.html">Login</a>
-            </form> <!-- End login -->
-          </div> <!-- End Manage Poll tab -->
-
-        </div> <!-- End tabs -->
-        
-    </div> <!-- End container -->
-
-
-
-    
-
-    <footer class="bg-light text-center text-lg-start">
-      <div class="text-center p-2 fixed-bottom" style="font-size: x-small;">
-        <b>MIS 385N: Blockchain Solution Development / Smart Contracts</b>
-        <br>
-        Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
+      <div class="col-auto text-center">
+        <h1>Hello, welcome to the voting app!</h1>
       </div>
-    </footer>
+    </div> <!-- End row -->
 
-  </body>
+    <hr><br>
+
+    <div class="row justify-content-center">
+      <div class="col-auto">
+        Poll questions:
+        <br>
+        *Add code for getQuestion()*
+        <a class="btn btn-sm btn-light btn-outline-dark" href="vote.html">Vote!</a>
+      </div>
+
+    </div> <!-- End row -->
+
+    <br><br>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+          role="tab" aria-controls="home" aria-selected="true">Poll Stats</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+          role="tab" aria-controls="profile" aria-selected="false">Manage Polls</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <!-- Poll Stats -->
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <br>
+        *Call winningProposal()*
+      </div> <!-- End Poll Stats tab -->
+
+
+      <!-- Manage Poll (only for chairman) -->
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <br>
+
+        <!-- Login -->
+        <form>
+
+          <b>Please enter chairman credentials:</b>
+          <br><br>
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Public key (?)</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text"></div>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Private key (?)</label>
+            <input type="password" class="form-control" id="exampleInputPassword1">
+          </div>
+          <a type="submit" class="btn btn-sm btn-primary" href="managepolls.html">Login</a>
+        </form> <!-- End login -->
+      </div> <!-- End Manage Poll tab -->
+
+    </div> <!-- End tabs -->
+
+  </div> <!-- End container -->
+
+
+
+
+
+  <footer class="bg-light text-center text-lg-start">
+    <div class="text-center p-2 fixed-bottom" style="font-size: x-small;">
+      <b>MIS 385N: Blockchain Solution Development / Smart Contracts</b>
+      <br>
+      Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
+    </div>
+  </footer>
+
+</body>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<!-- web3 -->
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+  integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+  integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+
+<script>
+
+  const web3 = new Web3('http://localhost:8545');
+
+  const myContractAddress = '0x78563f95469783c7e096e740414a208582873AEb';
+  const myAbi = [{ "inputs": [{ "internalType": "string", "name": "proposal", "type": "string" }, { "internalType": "address", "name": "chair", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "sender", "type": "address" }, { "indexed": false, "internalType": "string", "name": "action", "type": "string" }], "name": "PollVoted", "type": "event" }, { "inputs": [{ "internalType": "string", "name": "newOption", "type": "string" }], "name": "addNewOption", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "toAdd", "type": "address" }], "name": "addNewVoter", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getOptions", "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getQuestion", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getTotalVoted", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getTotalVoters", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "voteChoice", "type": "string" }], "name": "vote", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "winningProposal", "outputs": [{ "internalType": "string[]", "name": "", "type": "string[]" }], "stateMutability": "view", "type": "function" }];
+  const myContract = new web3.eth.Contract(myAbi, myContractAddress);
+
+  const htmlLabel = document.getElementById('myLabel');
+
+  myContract.methods.getQuestion().call().then((jsonRpcResult) => {
+    htmlLabel.innerHTML = jsonRpcResult;
+
+  });
+
+
+</script>
+
+
 </html>

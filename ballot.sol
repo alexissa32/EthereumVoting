@@ -8,6 +8,8 @@ pragma abicoder v2; //Needed to return string array
  * @dev Implements the ability to have anonymous voting for people in a meeting
  */
 contract Poll {
+    event PollVoted(address indexed sender, string action);
+
     string private question; //the question the vote is addressing
     address private chairperson; //the person that started the vote
 
@@ -46,7 +48,8 @@ contract Poll {
      * @dev Getter function for question
      * @return string the question
      */
-    function getQuestion() external view returns (string memory) {
+    function getQuestion() external returns (string memory) {
+        emit PollVoted(msg.sender, "getting question");
         return question;
     }
 
