@@ -33,6 +33,7 @@
 
 
     <script>
+      console.log(sessionStorage.getItem('account'));
       
 /*
       var contract;
@@ -291,6 +292,14 @@
         Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
       </div>
     </footer>
+
+    <script>
+      // Clears account variable from Session Storage when window is closed
+      window.onbeforeunload = function() {
+        localStorage.removeItem(account);
+        return '';
+      };
+    </script>
 
   </body>
 </html>

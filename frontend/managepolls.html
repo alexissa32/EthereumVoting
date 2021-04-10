@@ -281,5 +281,13 @@
       </div>
     </footer>
 
+    <script>
+      // Clears account variable from Session Storage when window is closed
+      window.onbeforeunload = function() {
+        localStorage.removeItem(account);
+        return '';
+      };
+    </script>
+
   </body>
 </html>

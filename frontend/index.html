@@ -90,10 +90,18 @@
               const showAccount = document.querySelector('#showAccount');
               const accountParagraph = document.querySelector('#accountParagraph');
 
+              if (sessionStorage.getItem('account') == null) {
+                ethereumButton.style.display = 'inline';
+              }
+              else {
+                ethereumButton.style.display = 'none';
+                getAccount();
+              }
+
               ethereumButton.addEventListener('click', () => {
                 getAccount();
               });
-
+              
               async function getAccount() {
                 const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                 const account = accounts[0];
@@ -104,9 +112,11 @@
                 ethereumButton.style.display = 'none';
 
                 // Store the account in a webpage cookie
-                document.cookie="account="+ account;
-                console.log(document.cookie);
+                sessionStorage.setItem("account", account);
+                //document.cookie="account="+ account;
+                console.log(sessionStorage.getItem('account'));
               }
+
             </script>
 
           </div>
@@ -179,6 +189,14 @@
         Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
       </div>
     </footer>
+
+    <script>
+      // Clears account variable from Session Storage when window is closed
+      window.onbeforeunload = function() {
+        localStorage.removeItem(account);
+        return '';
+      };
+    </script>
 
   </body>
 </html>
