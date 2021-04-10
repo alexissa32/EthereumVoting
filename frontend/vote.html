@@ -27,158 +27,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
-
-
-
-
-
     <script>
-      console.log(sessionStorage.getItem('account'));
-      
-/*
-      var contract;
+      const web3 = new Web3('http://localhost:8545');
+      const contractAddress = sessionStorage.getItem("contractAddress");
+      const abi = [{"inputs":[{"internalType":"string","name":"proposal","type":"string"},{"internalType":"address","name":"chair","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"newOption","type":"string"}],"name":"addNewOption","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"toAdd","type":"address"}],"name":"addNewVoter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getOptions","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQuestion","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"voteChoice","type":"string"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"winningProposal","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"}];
+      const myContract = new web3.eth.Contract(abi, contractAddress);
 
-
-      if (window.ethereum){
-        var address = "0xd9145CCE52D386f254917e481eB44e9943F39138";
-        var abi = [
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "newOption",
-                "type": "string"
-              }
-            ],
-            "name": "addNewOption",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "address",
-                "name": "toAdd",
-                "type": "address"
-              }
-            ],
-            "name": "addNewVoter",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "voteChoice",
-                "type": "string"
-              }
-            ],
-            "name": "vote",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "winningProposal",
-            "outputs": [
-              {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "proposal",
-                "type": "string"
-              },
-              {
-                "internalType": "address",
-                "name": "chair",
-                "type": "address"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-          },
-          {
-            "inputs": [],
-            "name": "getOptions",
-            "outputs": [
-              {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getQuestion",
-            "outputs": [
-              {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getTotalVoted",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getTotalVoters",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          }
-        ]; // End abi
-        
-        window.web3 = new Web3(window.ethereum);
-        contract = new window.web3.eth.Contract(abi, address);
-      }
-      //web3.eth.getBlockNumber().then(() => console.log('Done!'));
-      console.log(contract.methods.getQuestion().call());
-      console.log("done!")*/
-      
+      console.log("MetaMask account: " + sessionStorage.getItem("account"));
+      console.log("Contract address: " + sessionStorage.getItem("contractAddress"));
     </script>
-
-
-
-
-
-
-
 
     <div class="container">
 
@@ -207,81 +64,75 @@
             <div class="col-auto">
                 
                 <form>
-                    *Call getOptions()*
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                        <label class="form-check-label" for="exampleRadios1">
-                            Option 1
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                        <label class="form-check-label" for="exampleRadios2">
-                            Option 2
-                        </label>
-                    </div>
+                  *Call getOptions()*
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                      <label class="form-check-label" for="exampleRadios1">
+                          Option 1
+                      </label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                      <label class="form-check-label" for="exampleRadios2">
+                          Option 2
+                      </label>
+                  </div>
 
-                    <br>
+                  <br>
 
-                    *Call addNewOption()*
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">Don't like any of those options? Add your own!</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Add your question">
-                    </div>
+                  *Call addNewOption()*
+                  <div class="form-group">
+                      <label for="exampleInputPassword1">Don't like any of those options? Add your own!</label>
+                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Add your question">
+                  </div>
 
-                    <br>
+                  <br>
 
-                    *Call vote()*
-                    <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#loginModal">Submit</a>
+                  *Call vote()*
+                  <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#loginModal">Submit</a>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Please log in:</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Please log in:</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <!-- Login -->
+                        <div class="modal-body">
+                          <div class="mb-3">
+                            <label for="email" class="form-label">Public key (?)</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                            <div id="emailHelp" class="form-text"></div>
                           </div>
-
-                          <!-- Login -->
-                          <div class="modal-body">
-                            <div class="mb-3">
-                              <label for="email" class="form-label">Public key (?)</label>
-                              <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                              <div id="emailHelp" class="form-text"></div>
-                            </div>
-                            <div class="mb-3">
-                              <label for="password" class="form-label">Private key (?)</label>
-                              <input type="password" class="form-control" id="password">
-                            </div>
-                          </div> <!-- End login -->
-
-
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                            <a type="submit" class="btn btn-sm btn-primary" href="index.html">Submit vote</a>
+                          <div class="mb-3">
+                            <label for="password" class="form-label">Private key (?)</label>
+                            <input type="password" class="form-control" id="password">
                           </div>
+                        </div> <!-- End login -->
+
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                          <a type="submit" class="btn btn-sm btn-primary" href="index.html">Submit vote</a>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                  </form>
+              </form>
 
-
-                  
             </div>
+
         </div> <!-- End row -->
 
-
-        
-        
     </div> <!-- End container -->
 
-
-
-    
+    <br><br><br>
 
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-2 fixed-bottom" style="font-size: x-small;">
@@ -292,14 +143,6 @@
         Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
       </div>
     </footer>
-
-    <script>
-      // Clears account variable from Session Storage when window is closed
-      window.onbeforeunload = function() {
-        localStorage.removeItem(account);
-        return '';
-      };
-    </script>
 
   </body>
 </html>

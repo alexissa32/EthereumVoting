@@ -23,154 +23,12 @@
     <!-- web3 --> <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <!-- Bootstrap --> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
-
-
-
-
     <script>
-      
-/*
-      var contract;
-      if (window.ethereum){
-        var address = "0xd9145CCE52D386f254917e481eB44e9943F39138";
-        var abi = [
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "newOption",
-                "type": "string"
-              }
-            ],
-            "name": "addNewOption",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "address",
-                "name": "toAdd",
-                "type": "address"
-              }
-            ],
-            "name": "addNewVoter",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "voteChoice",
-                "type": "string"
-              }
-            ],
-            "name": "vote",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "winningProposal",
-            "outputs": [
-              {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-          },
-          {
-            "inputs": [
-              {
-                "internalType": "string",
-                "name": "proposal",
-                "type": "string"
-              },
-              {
-                "internalType": "address",
-                "name": "chair",
-                "type": "address"
-              }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-          },
-          {
-            "inputs": [],
-            "name": "getOptions",
-            "outputs": [
-              {
-                "internalType": "string[]",
-                "name": "",
-                "type": "string[]"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getQuestion",
-            "outputs": [
-              {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getTotalVoted",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          },
-          {
-            "inputs": [],
-            "name": "getTotalVoters",
-            "outputs": [
-              {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-              }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-          }
-        ]; // End abi
-        
-        window.web3 = new Web3(window.ethereum);
-        contract = new window.web3.eth.Contract(abi, address);
-      }
-      //web3.eth.getBlockNumber().then(() => console.log('Done!'));
-      console.log(contract.methods.getQuestion().call());
-      console.log("done!")*/
-      
+      const web3 = new Web3('http://localhost:8545');
+      const contractAddress = sessionStorage.getItem("contractAddress");
+      const abi = [{"inputs":[{"internalType":"string","name":"proposal","type":"string"},{"internalType":"address","name":"chair","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"newOption","type":"string"}],"name":"addNewOption","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"toAdd","type":"address"}],"name":"addNewVoter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getOptions","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQuestion","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"voteChoice","type":"string"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"winningProposal","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"}];
+      const myContract = new web3.eth.Contract(abi, contractAddress);
     </script>
-
-
-
-
-
-
-
 
     <div class="container">
 
@@ -182,12 +40,6 @@
               <h1>Manage Polls</h1>
           </div>
       </div> <!-- End row -->
-
-
-      
-
-
-
 
       <hr><br>
 
@@ -222,8 +74,6 @@
                     console.log($('#dropdownMenuButton1').text());
                   });
 
-                  
-                  
                 </script>
 
           </div> <!-- End col -->
@@ -262,14 +112,10 @@
           
       </div> <!-- End row -->
 
-      <br><br>
 
-        
     </div> <!-- End container -->
 
-
-
-    
+    <br><br><br>
 
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-2 fixed-bottom" style="font-size: x-small;">
@@ -280,14 +126,6 @@
         Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
       </div>
     </footer>
-
-    <script>
-      // Clears account variable from Session Storage when window is closed
-      window.onbeforeunload = function() {
-        localStorage.removeItem(account);
-        return '';
-      };
-    </script>
 
   </body>
 </html>
