@@ -37,7 +37,7 @@
 
     const web3 = new Web3('http://localhost:8545');
 
-    const myContractAddress = '0x7b464Ea7b3a20815f89C9627D2cE4D6F046E5b66';
+    const myContractAddress = '0x1aF1Ea258e804459BAB0c316D57A300B99856156';
     const myAbi = [{"inputs":[{"internalType":"string","name":"proposal","type":"string"},{"internalType":"address","name":"chair","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"newOption","type":"string"}],"name":"addNewOption","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"toAdd","type":"address"}],"name":"addNewVoter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getOptions","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQuestion","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"voteChoice","type":"string"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"winningProposal","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"}];
     const myContract = new web3.eth.Contract(myAbi, myContractAddress);
 
