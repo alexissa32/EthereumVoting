@@ -86,13 +86,11 @@
             </p>
 
             <script>
-              console.log("Inside JS Script");
               const ethereumButton = document.querySelector('#enableEthereumButton');
               const showAccount = document.querySelector('#showAccount');
               const accountParagraph = document.querySelector('#accountParagraph');
 
               ethereumButton.addEventListener('click', () => {
-                console.log("Inside Event Listener");
                 getAccount();
               });
 
@@ -106,7 +104,8 @@
                 ethereumButton.style.display = 'none';
 
                 // Store the account in a webpage cookie
-                //document.cookie="account="+ account;
+                document.cookie="account="+ account;
+                console.log(document.cookie);
               }
             </script>
 
