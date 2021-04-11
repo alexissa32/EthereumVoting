@@ -1,8 +1,8 @@
 const fs = require('fs');
 const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8545');
-const bytecode = fs.readFileSync('./build/ballot_sol_Poll.bin');
-const abi = JSON.parse(fs.readFileSync('./build/ballot_sol_Poll.abi'));
+const bytecode = fs.readFileSync('./_registry.bin');
+const abi = JSON.parse(fs.readFileSync('./_registry.abi'));
 
 (async function () {
   const ganacheAccounts = await web3.eth.getAccounts();
@@ -12,7 +12,7 @@ const abi = JSON.parse(fs.readFileSync('./build/ballot_sol_Poll.abi'));
 
   myContract.deploy({
     data: bytecode.toString(),
-    arguments: ["Omg is this working?","0xC7854Ff4CB030f6B0aC373abFF8937EeD08b83bC"]
+    //arguments: ["Omg is this working?","0xC7854Ff4CB030f6B0aC373abFF8937EeD08b83bC"]
   }).send({
     from: myWalletAddress,
     gas: 5000000
