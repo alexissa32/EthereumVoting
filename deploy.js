@@ -1,8 +1,8 @@
 const fs = require('fs');
 const Web3 = require('web3');
 const web3 = new Web3('http://localhost:8545');
-const bytecode = fs.readFileSync('./_registry.bin');
-const abi = JSON.parse(fs.readFileSync('./_registry.abi'));
+const bytecode = fs.readFileSync('./_user_registry.bin');
+const abi = JSON.parse(fs.readFileSync('./_user_registry.abi'));
 
 (async function () {
   const ganacheAccounts = await web3.eth.getAccounts();

@@ -1,18 +1,15 @@
 const fs = require('fs');
 const Web3 = require("web3");
 // Dai Stablecoin ABI
-const abi = JSON.parse(fs.readFileSync('./_registry.abi'));
+const abi = JSON.parse(fs.readFileSync('./_user_registry.abi'));
 const INFURA_URL =
     "http://localhost:8545";
 
 const web3 = new Web3(INFURA_URL);
 
 // Address of Contract
-const address = "0x5BB5f390E5F646Dab25cB8996728252F6FB37abd";
-
-const contract = new web3.eth.Contract(abi, address);
-
-
+const address = "0x25446F25dD6287E23F7B34a18d2fC8C6f84Cca05";
+const registry_contract = new web3.eth.Contract(abi, address);
 
 async function make_transaction() {
 
