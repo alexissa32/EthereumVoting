@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 
-import "./Ownable.sol";
-
 pragma solidity ^0.8.0;
 pragma abicoder v2; //Needed to return string array
 
@@ -9,7 +7,7 @@ pragma abicoder v2; //Needed to return string array
  * @title Poll
  * @dev Implements the ability to have anonymous voting for people in a meeting
  */
-contract Poll is Ownable {
+contract Poll {
     string private question; //the question the vote is addressing
     address private chairperson; //the person that started the vote
 
@@ -31,16 +29,23 @@ contract Poll is Ownable {
     /**
      * @dev Constructs Poll object
      * @param proposal the question we are posing
-     * @param chair the person running the poll
      */
-    constructor(string memory proposal, address chair) onlyOwner {
+    constructor(string memory proposal) {
         question = proposal;
-        chairperson = chair;
+        chairperson = msg.sender;
         voterAddresses[chairperson] = true;
         voterSize = 1;
         votedSize = 0;
         mostVotesSoFar = 0;
     }
+    
+    function isVoter(address user) external view returns (bool) {
+        return voterAddresses[user];
+    } 
+
+    function isChairperson(address thisChairperson) external view returns (bool) {
+        return chairperson == thisChairperson;
+    } 
 
     /**
      * @dev Getter function for question
@@ -117,7 +122,7 @@ contract Poll is Ownable {
      * @dev Allows chairman to add new voters
      * @param toAdd the address of the voter being added
      */
-    function addNewVoter(address toAdd, address chair) external onlyOwner {
+    function addNewVoter(address toAdd, address chair) external {
         require(
             chair == chairperson,
             "Only the chairperson can add new voters."
@@ -135,7 +140,7 @@ contract Poll is Ownable {
      * @dev Allows voters to cast their vote
      * @param voteChoice the string representing the voting choice of the current voter
      */
-    function vote(string memory voteChoice, address voter) external onlyOwner {
+    function vote(string memory voteChoice, address voter) external {
         require(
             voterAddresses[voter] == true,
             "You do not have the right to vote on this proposal."

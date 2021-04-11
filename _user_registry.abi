@@ -1,0 +1,54 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "contract Poll",
+				"name": "poll",
+				"type": "address"
+			}
+		],
+		"name": "addUserAsChairperson",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract Poll",
+				"name": "poll",
+				"type": "address"
+			}
+		],
+		"name": "addUserAsVoter",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getUser2Chairperson",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getUser2Poll",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
