@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
-
 import "./node_modules/@openzeppelin/contracts/access/Ownable.sol";
+
 pragma solidity >=0.7.0 <0.9.0;
 pragma abicoder v2; //Needed to return string array
 
@@ -28,7 +28,7 @@ contract Poll is Ownable {
      * @param proposal the question we are posing
      * @param chair the person running the poll
      */
-    constructor(string memory proposal, address chair) onlyOwner {
+    constructor(string memory proposal, address chair) {
         question = proposal;
         chairperson = chair;
         voterAddresses[chairperson] = true;
@@ -128,27 +128,36 @@ contract Poll is Ownable {
 
     /**
      * @dev Allows voters to cast their vote
-     * @param voteChoice the string representing the voting choice of the current voter
+     * @param index the index representing the string of voting choice of the current voter
+     * @param voter the address of the voter
      */
-    function vote(string memory voteChoice, address voter) external onlyOwner {
+    function vote(uint256 index, address voter) external onlyOwner {
         require(
             voterAddresses[voter] == true,
             "You do not have the right to vote on this proposal."
         );
         require(voters[voter] == false, "You have already voted.");
+
+        require(index >= 0, "index must equal or larger than 0");
         require(
-            optionsExist[voteChoice] == true,
+            index < optionsTally.length,
+            "index must smaller than the size of current option size"
+        );
+
+        require(
+            optionsExist[optionsTally[index]] == true,
             "This vote option does not exist."
         );
+
         voters[voter] = true;
-        optionsVote[voteChoice] += 1;
+        optionsVote[optionsTally[index]] += 1;
         votedSize += 1;
-        if (optionsVote[voteChoice] > mostVotesSoFar) {
+        if (optionsVote[optionsTally[index]] > mostVotesSoFar) {
             delete winningOption;
-            mostVotesSoFar = optionsVote[voteChoice];
-            winningOption.push(voteChoice);
-        } else if (optionsVote[voteChoice] == mostVotesSoFar) {
-            winningOption.push(voteChoice);
+            mostVotesSoFar = optionsVote[optionsTally[index]];
+            winningOption.push(optionsTally[index]);
+        } else if (optionsVote[optionsTally[index]] == mostVotesSoFar) {
+            winningOption.push(optionsTally[index]);
         }
     }
 

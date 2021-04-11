@@ -1,52 +1,144 @@
 const fs = require('fs');
 const Web3 = require("web3");
-// Dai Stablecoin ABI
-const abi = JSON.parse(fs.readFileSync('./_Combine_sol_Registry.abi'));
+
+
 const INFURA_URL =
     "http://localhost:8545";
 
 const web3 = new Web3(INFURA_URL);
 
-// Address of Contract
-const address = "0x76e91f91404e9604Fb3b897d91952894137c8812";
-
-const contract = new web3.eth.Contract(abi, address);
 
 
 
-async function make_transaction() {
+async function transfer_ownaship() {
+    // Address of Contract
+    const address = "0x89063ae3e88783Fa2806a86e6181Fcc27F51f6be"; // addresss of the Poll
+    const abi = JSON.parse(fs.readFileSync('./_Poll_sol_Poll.abi'));
+    const contract = new web3.eth.Contract(abi, address);
 
-    // my wallet info
-    const ganacheAccounts = await web3.eth.getAccounts();
-    const myWalletAddress = ganacheAccounts[0];
-    // suppose you want to call a function named myFunction of myContract
-    await contract.methods.createPoll("Is poll contract created?").send(
-        {
-
-            from: myWalletAddress,
-        }
-    )
-
-    console.log("transaction successfullly made!")
-}
-make_transaction();
-
-async function make_transaction_registry() {
 
     // my wallet info
     const ganacheAccounts = await web3.eth.getAccounts();
-    const myWalletAddress = ganacheAccounts[2];
-    // suppose you want to call a function named myFunction of myContract
-    await contract.methods.createNewRecord("0xdF0cc4221d7B2f716cc55e511A388BC74855A599", 2).send(
-        {
+    const myWalletAddress = ganacheAccounts[0];   // initial owner of the Poll, who deployed it
 
-            from: myWalletAddress,
-        }
-    )
+    try {
+        await contract.methods.transferOwnership("0x80285AC9a2dC128B12F0cE0e9396cb360eB95bb4").send(
+            {
+                // gas: 100000000000000,
+                from: myWalletAddress,
+            }
+        )
+    } catch (error) {
+        console.log(error);
+    }
 
-    console.log("registry transaction successfullly made!")
+
+    console.log("owner transfer successfullly made!")
 }
-// make_transaction_registry();
+
+// transfer_ownaship();
+
+async function create_poll() {
+    // Address of Contract
+    const address = "0x80285AC9a2dC128B12F0cE0e9396cb360eB95bb4"; // addresss of the Registry
+    const abi = JSON.parse(fs.readFileSync('./_Registry_sol_Registry.abi'));
+    const contract = new web3.eth.Contract(abi, address);
+
+
+    // my wallet info
+    const ganacheAccounts = await web3.eth.getAccounts();
+    const myWalletAddress = ganacheAccounts[0]; // this address should be the real person, like the client?
+    // suppose you want to call a function named myFunction of myContract
+    try {
+        await contract.methods.createPoll("0x89063ae3e88783Fa2806a86e6181Fcc27F51f6be").send(
+            {
+                // gas: 100000000000000,
+                from: myWalletAddress,
+            }
+        )
+    } catch (error) {
+        console.log(error);
+    }
+
+
+    console.log("create poll event successfullly made!")
+}
+// create_poll();
+
+
+async function add_voter() {
+    // Address of Contract
+    const address = "0x80285AC9a2dC128B12F0cE0e9396cb360eB95bb4"; // addresss of the Registry
+    const abi = JSON.parse(fs.readFileSync('./_Registry_sol_Registry.abi'));
+    const contract = new web3.eth.Contract(abi, address);
+
+
+    // my wallet info
+    const ganacheAccounts = await web3.eth.getAccounts();
+    const myWalletAddress = ganacheAccounts[0]; // this should be the chairman of that poll
+    // suppose you want to call a function named myFunction of myContract
+    try {
+        await contract.methods.addNewVoter(ganacheAccounts[9], "0x89063ae3e88783Fa2806a86e6181Fcc27F51f6be").send(
+            {
+                // gas: 100000000000000,
+                from: myWalletAddress,
+            }
+        )
+    } catch (error) {
+        console.log(error);
+    }
+
+
+    console.log("add_voter successfullly made!")
+}
+// add_voter();
+
+
+async function vote() {
+    // Address of Contract
+    const address = "0x80285AC9a2dC128B12F0cE0e9396cb360eB95bb4"; // addresss of the Registry
+    const abi = JSON.parse(fs.readFileSync('./_Registry_sol_Registry.abi'));
+    const contract = new web3.eth.Contract(abi, address);
+
+
+    // my wallet info
+    const ganacheAccounts = await web3.eth.getAccounts();
+    const myWalletAddress = ganacheAccounts[9]; // this should be valid voter for that poll
+
+    // first the voter will add vote option to that poll
+    const p_address = "0x89063ae3e88783Fa2806a86e6181Fcc27F51f6be"; // addresss of the poll
+    const p_abi = JSON.parse(fs.readFileSync('./_Poll_sol_Poll.abi'));
+    const p_contract = new web3.eth.Contract(p_abi, p_address);
+
+    try {
+        await p_contract.methods.addNewOption("Yue[0] creates the poll.").send(
+            {
+                // gas: 100000000000000,
+                from: myWalletAddress,   // one valid voter who can add option
+            }
+        )
+    } catch (error) {
+        console.log(error);
+    }
+
+    console.log("Vote option successfully created!")
+    // then this voter will vote it and at the same time the Registry should log it
+    try {
+        await contract.methods.vote("0x89063ae3e88783Fa2806a86e6181Fcc27F51f6be", 0).send(
+            {
+                // gas: 100000000000000,
+                from: myWalletAddress,  // one, or another one valid voter who can add option
+            }
+        )
+    } catch (error) {
+        console.log(error);
+    }
+
+
+    console.log("a voter successfullly voted!")
+}
+vote();
+
 
 
 
