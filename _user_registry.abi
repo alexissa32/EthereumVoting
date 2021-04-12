@@ -18,6 +18,11 @@
 				"internalType": "contract Poll",
 				"name": "poll",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "voterAddress",
+				"type": "address"
 			}
 		],
 		"name": "addUserAsVoter",

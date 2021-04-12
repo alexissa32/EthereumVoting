@@ -29,11 +29,6 @@
 				"internalType": "address",
 				"name": "toAdd",
 				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "chair",
-				"type": "address"
 			}
 		],
 		"name": "addNewVoter",
@@ -137,11 +132,6 @@
 				"internalType": "string",
 				"name": "voteChoice",
 				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "voter",
-				"type": "address"
 			}
 		],
 		"name": "vote",

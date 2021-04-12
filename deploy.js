@@ -12,13 +12,12 @@ const abi = JSON.parse(fs.readFileSync('./_user_registry.abi'));
 
   myContract.deploy({
     data: bytecode.toString(),
-    //arguments: ["Omg is this working?","0xC7854Ff4CB030f6B0aC373abFF8937EeD08b83bC"]
   }).send({
     from: myWalletAddress,
     gas: 5000000
   }).then((deployment) => {
-    console.log('FirstContract was successfully deployed!');
-    console.log('FirstContract can be interfaced with at this address:');
+    console.log('User Registry was successfully deployed!');
+    console.log('User Registry can be interfaced with at this address:');
     console.log(deployment.options.address);
   }).catch((err) => {
     console.error(err);

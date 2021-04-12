@@ -122,9 +122,9 @@ contract Poll {
      * @dev Allows chairman to add new voters
      * @param toAdd the address of the voter being added
      */
-    function addNewVoter(address toAdd, address chair) external {
+    function addNewVoter(address toAdd) external {
         require(
-            chair == chairperson,
+            msg.sender == chairperson,
             "Only the chairperson can add new voters."
         ); //address must be chairperson
         require(
@@ -140,18 +140,18 @@ contract Poll {
      * @dev Allows voters to cast their vote
      * @param voteChoice the string representing the voting choice of the current voter
      */
-    function vote(string memory voteChoice, address voter) external {
+    function vote(string memory voteChoice) external {
         require(
-            voterAddresses[voter] == true,
+            voterAddresses[msg.sender] == true,
             "You do not have the right to vote on this proposal."
         );
-        require(voters[voter] == false, "You have already voted.");
+        require(voters[msg.sender] == false, "You have already voted.");
         require(
             optionsExist[voteChoice] == true,
             "This vote option does not exist."
         );
 
-        voters[voter] = true;
+        voters[msg.sender] = true;
         optionsVote[voteChoice] += 1;
         votedSize += 1;
 

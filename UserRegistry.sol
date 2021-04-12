@@ -21,14 +21,13 @@ contract Registry {
         return user2chairperson[msg.sender];
     }
     
-    function addUserAsVoter(Poll poll) public {
-        require(poll.isVoter(msg.sender) == true, "This user is not a member of the specified poll.");
-        require(poll.isChairperson(msg.sender) == false, "This user is the chairperson, not just a voter.");
-        user2polls[msg.sender].push(address(poll));
+    function addUserAsVoter(Poll poll, address voterAddress) public {
+        require(poll.isChairperson(msg.sender) == true, "The address specified is not the chairperson of this poll.");
+        user2polls[voterAddress].push(address(poll));
     }
     
     function addUserAsChairperson(Poll poll) public {
-        require(poll.isChairperson(msg.sender) == true, "This address specified is not the chairperson of this poll.");
+        require(poll.isChairperson(msg.sender) == true, "The address specified is not the chairperson of this poll.");
         user2chairperson[msg.sender].push(address(poll));
     }
 }
