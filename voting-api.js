@@ -1,25 +1,19 @@
 //imports
-const fs = require('fs');
-const Web3 = require("web3");
+//const fs = require('fs');
+//const Web3 = require("web3");
 
 //connect to ethereum node
 const INFURA_URL = "http://localhost:8545";
-const web3 = new Web3(INFURA_URL);
+window.web3 = new Web3(INFURA_URL);
 
 //Useful User Registry information
-const address = "0x70f3A39C29ACAc78882beB585e969ae609D35F91"; // addresss of the Registry
+const address = "0xf6813e78dFB8370b604575033e3c7968aeDe2185"; // addresss of the Registry
 const abi = JSON.parse(fs.readFileSync('./_user_registry.abi'));
 const registry_contract = new web3.eth.Contract(abi, address);
 
 //Useful global Poll stuff
 const pollAbi = JSON.parse(fs.readFileSync('./_poll2.abi'));
 const pollBytecode = fs.readFileSync('./_poll2.bin');
-
-//TO DELETE
-var myWalletAddress1 = "0xD5d006B8A3Da2A33d94F789d4b7E142D30913c10";
-var myWalletAddress2 = "0x0b201DE91268800B113e7EC2Bec5fea4b45b752a";
-var myWalletAddress3 = "0x158F92B1E77e0Eff1261c1cF93CCDf64Bd5861A3";
-var testPoll = "0xc9af8e08Af45573711023b018B4A08af88c8Ae48";
 
 //---------------------------Create a Poll-----------------------------------
 async function createPoll(myWalletAddress, pollQuestion) {

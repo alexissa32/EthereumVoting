@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <script src="./../node_modules/web3/dist/web3.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mocha/1.0.2/package/lib/browser/fs.js"></script>
+
+    <!-- web3 --> <!--<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>-->
 
     <style>
         .container {
@@ -19,38 +25,350 @@
 
   <body>
 
-    <!-- jQuery --> <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-    <!-- web3 --> <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script type="module">
+      //imports
+      import * as fs from 'https://cdnjs.cloudflare.com/ajax/libs/mocha/1.0.2/package/lib/browser/fs.js';
+      //const fs = require('fs');
+      //const Web3 = require("web3");
+
+      //connect to ethereum node
+      const INFURA_URL = "http://localhost:8545";
+      const web3 = new Web3(INFURA_URL);
+
+      //Useful User Registry information
+      const address = "0xf6813e78dFB8370b604575033e3c7968aeDe2185"; // addresss of the Registry
+      const abi = JSON.parse(fs.readFileSync('./_user_registry.abi'));
+      const registry_contract = new web3.eth.Contract(abi, address);
+
+      //Useful global Poll stuff
+      const pollAbi = JSON.parse(fs.readFileSync('./_poll2.abi'));
+      const pollBytecode = fs.readFileSync('./_poll2.bin');
+
+      //---------------------------Create a Poll-----------------------------------
+      async function createPoll(myWalletAddress, pollQuestion) {
+          // my wallet info
+          //const ganacheAccounts = await web3.eth.getAccounts();
+          //const myWalletAddress = ganacheAccounts[1]; // this address should be the real person, like the client?
+          // suppose you want to call a function named myFunction of myContract
+          
+          const myContract = new web3.eth.Contract(pollAbi);
+
+          var deployedPollAddress = await myContract.deploy({
+              data: pollBytecode.toString(),
+              arguments: [pollQuestion]
+          }).send({
+              from: myWalletAddress,
+              gas: 5000000
+          }).then((deployment) => {
+              console.log('Poll was successfully deployed!');
+              console.log('Poll can be interfaced with at this address:');
+              console.log(deployment.options.address);
+              return deployment.options.address;
+          }).catch((err) => {
+              //console.error(err);
+              return err;
+          });
+
+          var result = await registry_contract.methods.addUserAsChairperson(deployedPollAddress).send( {
+              // gas: 100000000000000,
+              from: myWalletAddress,
+          }).then((res) => {
+              return res;
+          }).catch((err) => {
+              //console.error(err);
+              return err;
+          });
+
+          console.log("Poll successfully made and chaipreson is registered");
+
+          return [deployedPollAddress, result];
+      }
+      //var ret = createPoll(myWalletAddress1, "Does this work?");
+      //setTimeout(() => { console.log(ret); }, 1000);
+
+      //---------------------------Interact with User Registry---------------------
+      async function getUser2Voter(myWalletAddress) {
+          var addresses = await registry_contract.methods.getUser2Poll().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(addresses)
+          return addresses;
+      }
+      // var ret = getUser2Voter(myWalletAddress3);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function getUser2Chairperson(myWalletAddress) {
+          // my wallet info
+          //const ganacheAccounts = await web3.eth.getAccounts();
+          //const myWalletAddress = ganacheAccounts[1]; // this should be the chairman of that poll
+          // suppose you want to call a function named myFunction of myContract
+
+          var addresses = await registry_contract.methods.getUser2Chairperson().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(addresses)
+          return addresses;
+      }
+      // var ret = getUser2Chairperson(myWalletAddress1);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      //--------------------------Interact with a Poll----------------------------
+      async function isVoter(myWalletAddress, pollAddress, checkAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var result = await p_contract.methods.isVoter(checkAddress).call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,   // one valid voter who can add option
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(result)
+          return result;
+      }
+      // var ret = isVoter(myWalletAddress1, testPoll, myWalletAddress3);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function isChairperson(myWalletAddress, pollAddress, checkAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var result = await p_contract.methods.isChairperson(checkAddress).call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,   // one valid voter who can add option
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(result)
+          return result;
+      }
+      // var ret = isChairperson(myWalletAddress1, testPoll, myWalletAddress1);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function getQuestion(myWalletAddress, pollAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var question = await p_contract.methods.getQuestion().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              //console.error(err);
+              return err;
+          });
+          //console.log(question)
+          return question;
+      }
+      // var ret = getQuestion(myWalletAddress1, testPoll);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function getOptions(myWalletAddress, pollAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var options = await p_contract.methods.getOptions().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(options)
+          return options;
+      }
+      // var ret = getOptions(myWalletAddress1, testPoll);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function getTotalVoters(myWalletAddress, pollAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var voters = await p_contract.methods.getTotalVoters().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(voters)
+          return voters;
+      }
+      // var ret = getTotalVoters(myWalletAddress1, testPoll);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function getTotalVoted(myWalletAddress, pollAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var voted = await p_contract.methods.getTotalVoted().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(voted)
+          return voted;
+      }
+      // var ret = getTotalVoted(myWalletAddress1, testPoll);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+
+      async function addNewOption(myWalletAddress, pollAddress, voteOption) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var result = await p_contract.methods.addNewOption(voteOption).send(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,   // one valid voter who can add option
+              }
+          ).then((res) => {
+              return res;
+          }).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(result)
+          return result;
+      }
+      // var ret1 = addNewOption(myWalletAddress1, testPoll, "Yes");
+      // setTimeout(() => { console.log(ret1); }, 5000); //should work
+      // var ret2 = addNewOption(myWalletAddress2, testPoll, "No");
+      // setTimeout(() => { console.log(ret2); }, 5000); //should work
+      // var ret3 = addNewOption(myWalletAddress3, testPoll, "Maybe");
+      // setTimeout(() => { console.log(ret3); }, 5000); //should work
+      // var ret4 = addNewOption(myWalletAddress1, testPoll, "Maybe");
+      // setTimeout(() => { console.log(ret4); }, 5000); //should NOT work
+      // var ret4 = addNewOption("0x1885dC6f4d9Ba1Be44a847B4EC06eAe52D4d8a56", testPoll, "Option 4");
+      // setTimeout(() => { console.log(ret4); }, 5000); //should NOT work
+
+      async function addNewVoter(chairpersonWalletAddress, pollAddress, newVoterAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var keepGoing = true;
+
+          var pollResult = await p_contract.methods.addNewVoter(newVoterAddress).send(
+              {
+                  // gas: 100000000000000,
+                  from: chairpersonWalletAddress,   // one valid voter who can add option
+              }
+          ).then((res) => {
+              return res;
+          }).catch((err) => {
+              //console.error(err);
+              keepGoing = false;
+              return err;
+          });
+          //console.log(pollResult);
+
+          if(!keepGoing) {
+              return pollResult;
+          }
+
+          var registryResult = await registry_contract.methods.addUserAsVoter(pollAddress, newVoterAddress).send( {
+              // gas: 100000000000000,
+              from: chairpersonWalletAddress,
+          }).then((res) => {
+              return res;
+          }).catch((err) => {
+              //console.error(err);
+              return err;
+          });
+          //console.log(registryResult)
+
+          return [pollResult, registryResult];
+      }
+      // var ret1 = addNewVoter(myWalletAddress1, testPoll, myWalletAddress2);
+      // setTimeout(() => { console.log(ret1); }, 5000); //should work
+      // var ret2 = addNewVoter(myWalletAddress2, testPoll, myWalletAddress3);
+      // setTimeout(() => { console.log(ret2); }, 5000); //error not chairperson
+      // var ret3 = addNewVoter(myWalletAddress1, testPoll, myWalletAddress2);
+      // setTimeout(() => { console.log(ret3); }, 5000); //error already added
+      // var ret4 = addNewVoter(myWalletAddress1, testPoll, myWalletAddress3);
+      // setTimeout(() => { console.log(ret4); }, 5000); //should work
+
+      // var ret1 = addNewVoter(myWalletAddress1, testPoll, "0x7A3Ff6d6Ee04579c3A3d49096Cd30708Ed0B181b");
+      // setTimeout(() => { console.log(ret1); }, 5000); //should work
+      // var ret2 = addNewVoter(myWalletAddress1, testPoll, "0x7A3Ff6d6Ee04579c3A3d49096Cd30708Ed0B181b");
+      // setTimeout(() => { console.log(ret2); }, 5000); //error not chairperson
+
+      async function vote(myWalletAddress, pollAddress, voteOption) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var result = await p_contract.methods.vote(voteOption).send(
+              {
+                  gas: 1000000,
+                  from: myWalletAddress, 
+              }
+          ).then((res) => {
+              return res;
+          }).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(result)
+          return result;
+      }
+      // var ret1 = vote(myWalletAddress1, testPoll, "Maybe");
+      // setTimeout(() => { console.log(ret1); }, 5000); //should work
+      // var ret2 = vote(myWalletAddress2, testPoll, "No");
+      // setTimeout(() => { console.log(ret2); }, 5000); //should work
+      // var ret3 = vote(myWalletAddress3, testPoll, "Yes");
+      // setTimeout(() => { console.log(ret3); }, 5000); //should work
+      // var ret4 = vote(myWalletAddress1, testPoll, "Maybe");
+      // setTimeout(() => { console.log(ret4); }, 5000); //should NOT work
+      // var ret5 = vote("0x1885dC6f4d9Ba1Be44a847B4EC06eAe52D4d8a56", testPoll, "Option 4");
+      // setTimeout(() => { console.log(ret5); }, 5000); //should NOT work
+
+      async function winningProposal(myWalletAddress, pollAddress) {
+          const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
+
+          var result = await p_contract.methods.winningProposal().call(
+              {
+                  // gas: 100000000000000,
+                  from: myWalletAddress,
+              }
+          ).catch((err) => {
+              console.error(err);
+              return err;
+          });
+          console.log(result)
+          return result;
+      }
+      // var ret = winningProposal(myWalletAddress1, testPoll);
+      // setTimeout(() => { console.log(ret); }, 1000); //should work
+    </script>
+
+    <!--<script type="text/javascript" src="./../voting-api.js"></script>-->
+
+    
     <!-- Bootstrap --> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.6/dist/web3.min.js"></script>
-    <script>
-
-      const web3 = new Web3('http://localhost:8545');
-
-      const contractAddress = '0x31c9246d6f169E0C794b881554661E3eD54e579e';
-      const abi = [{"inputs":[{"internalType":"string","name":"proposal","type":"string"},{"internalType":"address","name":"chair","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"newOption","type":"string"}],"name":"addNewOption","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"toAdd","type":"address"}],"name":"addNewVoter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getOptions","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQuestion","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"voteChoice","type":"string"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"winningProposal","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"}];
-      const myContract = new web3.eth.Contract(abi, contractAddress);
-
-      sessionStorage.setItem("contractAddress", contractAddress);
-      sessionStorage.setItem("abi", abi);
-
-      // Check if the MetaMask extension is installed
-      if (typeof window.ethereum !== 'undefined') {
-        console.log('MetaMask is installed!');
-      }
-
-      console.log("MetaMask account: " + sessionStorage.getItem("account"));
-      console.log("Contract address: " + sessionStorage.getItem("contractAddress"));
     
-    </script>
-
-
-
 
 
 <!-- Alex's Stuff -->
@@ -59,11 +377,11 @@
     <label id="myLabel"></label>
 
     <script>
-      const htmlLabel = document.getElementById('myLabel');
+      /*const htmlLabel = document.getElementById('myLabel');
 
       myContract.methods.getQuestion().call().then((jsonRpcResult) => {
         htmlLabel.innerHTML = jsonRpcResult;
-      });
+      });*/
     </script>
 <!-- End Alex's Stuff -->
 
@@ -122,6 +440,8 @@
                 //document.cookie="account="+ account;
                 console.log("MetaMask account: " + sessionStorage.getItem('account'));
                 console.log("Contract address: " + sessionStorage.getItem('contractAddress'));
+
+                console.log(getUser2Voter(account));
               }
             </script>
 
