@@ -27,27 +27,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
-    <h1>Alex Testing</h1>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.6/dist/web3.min.js"></script>
+    <script>
+
+      const web3 = new Web3('http://localhost:8545');
+
+      const contractAddress = '0x31c9246d6f169E0C794b881554661E3eD54e579e';
+      const abi = [{"inputs":[{"internalType":"string","name":"proposal","type":"string"},{"internalType":"address","name":"chair","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"newOption","type":"string"}],"name":"addNewOption","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"toAdd","type":"address"}],"name":"addNewVoter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getOptions","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQuestion","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"voteChoice","type":"string"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"winningProposal","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"}];
+      const myContract = new web3.eth.Contract(abi, contractAddress);
+
+      sessionStorage.setItem("contractAddress", contractAddress);
+      sessionStorage.setItem("abi", abi);
+
+      // Check if the MetaMask extension is installed
+      if (typeof window.ethereum !== 'undefined') {
+        console.log('MetaMask is installed!');
+      }
+
+      console.log("MetaMask account: " + sessionStorage.getItem("account"));
+      console.log("Contract address: " + sessionStorage.getItem("contractAddress"));
+    
+    </script>
+
+
+
+
+
+<!-- Alex's Stuff -->
     <label>Contract.getQuestion</label>
     <br />
     <label id="myLabel"></label>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.6/dist/web3.min.js"></script>
     <script>
+      const htmlLabel = document.getElementById('myLabel');
 
-    const web3 = new Web3('http://localhost:8545');
-
-    const myContractAddress = '0x7b464Ea7b3a20815f89C9627D2cE4D6F046E5b66';
-    const myAbi = [{"inputs":[{"internalType":"string","name":"proposal","type":"string"},{"internalType":"address","name":"chair","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"newOption","type":"string"}],"name":"addNewOption","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"toAdd","type":"address"}],"name":"addNewVoter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getOptions","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getQuestion","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoted","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalVoters","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"voteChoice","type":"string"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"winningProposal","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"}];
-    const myContract = new web3.eth.Contract(myAbi, myContractAddress);
-
-    const htmlLabel = document.getElementById('myLabel');
-
-    myContract.methods.getQuestion().call().then((jsonRpcResult) => {
-      htmlLabel.innerHTML = jsonRpcResult;
-    });
-
+      myContract.methods.getQuestion().call().then((jsonRpcResult) => {
+        htmlLabel.innerHTML = jsonRpcResult;
+      });
     </script>
+<!-- End Alex's Stuff -->
+
+
+
+
+
+
 
     <div class="container">
 
@@ -60,8 +84,58 @@
             </div>
         </div> <!-- End row -->
 
-        <hr><br>
+        <div class="row justify-content-center">
+          <div class="col-auto text-center">
+            <button id="enableEthereumButton">Get Ethereum Account</button>
+            <p id="accountParagraph" style="display: none;">
+              Account: <span id="showAccount"></span>
+            </p>
 
+            <script>
+              const ethereumButton = document.querySelector('#enableEthereumButton');
+              const showAccount = document.querySelector('#showAccount');
+              const accountParagraph = document.querySelector('#accountParagraph');
+
+              if (sessionStorage.getItem('account') == null) {
+                ethereumButton.style.display = 'inline';
+              }
+              else {
+                ethereumButton.style.display = 'none';
+                getAccount();
+              }
+
+              ethereumButton.addEventListener('click', () => {
+                getAccount();
+              });
+              
+              async function getAccount() {
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const account = accounts[0];
+                showAccount.innerHTML = account;
+                accountParagraph.style.display = 'inline';
+
+                // Hide enable button
+                ethereumButton.style.display = 'none';
+
+                // Store the account in a webpage cookie
+                sessionStorage.setItem("account", account);
+                //document.cookie="account="+ account;
+                console.log("MetaMask account: " + sessionStorage.getItem('account'));
+                console.log("Contract address: " + sessionStorage.getItem('contractAddress'));
+              }
+            </script>
+
+          </div>
+        </div> <!-- End row -->
+
+      <hr><br>
+
+
+
+
+
+
+      <div id="content">
         <div class="row justify-content-center">
             <div class="col-auto">
                 Poll questions: 
@@ -111,14 +185,12 @@
               <a type="submit" class="btn btn-sm btn-primary" href="managepolls.html">Login</a>
             </form> <!-- End login -->
           </div> <!-- End Manage Poll tab -->
-
         </div> <!-- End tabs -->
-        
+      </div> <!-- End content -->
+
     </div> <!-- End container -->
 
-
-
-    
+    <br><br><br>
 
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-2 fixed-bottom" style="font-size: x-small;">
@@ -127,6 +199,19 @@
         Team 2 members: Alex Issa, Edward Hu, Ella Akl, InBae Chung, Palmer Wenzel, Yue Cheng
       </div>
     </footer>
+
+    <script>
+      // Clears account variable from Session Storage when window is closed
+      
+
+      window.addEventListener('beforeunload', function(event) {
+        sessionStorage.removeItem(account);
+        sessionStorage.removeItem(contractAddress);
+        sessionStorage.removeItem(abi);
+        return '';
+      }, false);
+
+    </script>
 
   </body>
 </html>
