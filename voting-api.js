@@ -7,7 +7,7 @@ const INFURA_URL = "http://localhost:8545";
 const web3 = new Web3(INFURA_URL);
 
 //Useful User Registry information
-const address = "0x70f3A39C29ACAc78882beB585e969ae609D35F91"; // addresss of the Registry
+const address = "0x42239239aA44AD762aF62DBD26c1510Ea9ef7354"; // addresss of the Registry
 const abi = JSON.parse(fs.readFileSync('./_user_registry.abi'));
 const registry_contract = new web3.eth.Contract(abi, address);
 
@@ -16,10 +16,10 @@ const pollAbi = JSON.parse(fs.readFileSync('./_poll2.abi'));
 const pollBytecode = fs.readFileSync('./_poll2.bin');
 
 //TO DELETE
-var myWalletAddress1 = "0xD5d006B8A3Da2A33d94F789d4b7E142D30913c10";
-var myWalletAddress2 = "0x0b201DE91268800B113e7EC2Bec5fea4b45b752a";
-var myWalletAddress3 = "0x158F92B1E77e0Eff1261c1cF93CCDf64Bd5861A3";
-var testPoll = "0xc9af8e08Af45573711023b018B4A08af88c8Ae48";
+var myWalletAddress1 = "0xFC2802C73d7c867aCA77F084cefa126df0C015af";
+var myWalletAddress2 = "0xD119938555373f9c689207455bF867fC3B1019C1";
+var myWalletAddress3 = "0xEAe7A589CdE78a308cA0CC4Cc6c61fDF278fAb75";
+var testPoll = "0x1D02E6eFc1A68090AD09913024f8E49c3a0ddA2D";
 
 //---------------------------Create a Poll-----------------------------------
 async function createPoll(myWalletAddress, pollQuestion) {
@@ -60,8 +60,8 @@ async function createPoll(myWalletAddress, pollQuestion) {
 
     return [deployedPollAddress, result];
 }
-//var ret = createPoll(myWalletAddress1, "Does this work?");
-//setTimeout(() => { console.log(ret); }, 1000);
+// var ret = createPoll(myWalletAddress1, "Does this work?");
+// setTimeout(() => { console.log(ret); }, 1000);
 
 //---------------------------Interact with User Registry---------------------
 async function getUser2Voter(myWalletAddress) {
@@ -98,7 +98,7 @@ async function getUser2Chairperson(myWalletAddress) {
     console.log(addresses)
     return addresses;
 }
-// var ret = getUser2Chairperson(myWalletAddress1);
+// var ret = getUser2Chairperson(myWalletAddress3);
 // setTimeout(() => { console.log(ret); }, 1000); //should work
 
 //--------------------------Interact with a Poll----------------------------
@@ -235,8 +235,8 @@ async function addNewOption(myWalletAddress, pollAddress, voteOption) {
 // setTimeout(() => { console.log(ret3); }, 5000); //should work
 // var ret4 = addNewOption(myWalletAddress1, testPoll, "Maybe");
 // setTimeout(() => { console.log(ret4); }, 5000); //should NOT work
-// var ret4 = addNewOption("0x1885dC6f4d9Ba1Be44a847B4EC06eAe52D4d8a56", testPoll, "Option 4");
-// setTimeout(() => { console.log(ret4); }, 5000); //should NOT work
+// var ret5 = addNewOption("0x6F607D20c1Fe0c8190669dDc9cb1c88F2dF03341", testPoll, "Option 4");
+// setTimeout(() => { console.log(ret5); }, 5000); //should NOT work
 
 async function addNewVoter(chairpersonWalletAddress, pollAddress, newVoterAddress) {
     const p_contract = new web3.eth.Contract(pollAbi, pollAddress);
@@ -313,7 +313,7 @@ async function vote(myWalletAddress, pollAddress, voteOption) {
 // setTimeout(() => { console.log(ret3); }, 5000); //should work
 // var ret4 = vote(myWalletAddress1, testPoll, "Maybe");
 // setTimeout(() => { console.log(ret4); }, 5000); //should NOT work
-// var ret5 = vote("0x1885dC6f4d9Ba1Be44a847B4EC06eAe52D4d8a56", testPoll, "Option 4");
+// var ret5 = vote("0x6F607D20c1Fe0c8190669dDc9cb1c88F2dF03341", testPoll, "Option 4");
 // setTimeout(() => { console.log(ret5); }, 5000); //should NOT work
 
 async function winningProposal(myWalletAddress, pollAddress) {
