@@ -12,9 +12,9 @@ contract Registry {
     event AddVoter(address indexed personAdded, address indexed poll); // only chairman can do that
     event Vote(address indexed voter, address indexed poll);
 
-    function createPoll(address poll) public {
-        // new Poll(proposal, msg.sender); //assume this deploys a Poll and returns addresss of Poll
-        emit Create(msg.sender, poll); //we know this is with role 1   --- this has to be changed!!!!
+    function createPoll(string memory proposal) public {
+        new Poll(proposal, msg.sender); //assume this deploys a Poll and returns addresss of Poll
+        // emit Create(msg.sender, poll); //we know this is with role 1   --- this has to be changed!!!!
     }
 
     function addNewVoter(address toAdd, Poll poll) public {
